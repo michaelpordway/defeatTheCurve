@@ -1,0 +1,57 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+// create previousAttempts schema
+
+const previousAttemptsSchema = new Schema({
+    times: {
+        type: [Number],
+        default: []
+    },
+    wasAnswerCorrect: {
+        type: [Boolean],
+        default: []
+    }
+});
+
+// create ninja Schema & model
+
+const btcSchema = new Schema({
+    question: {
+        type: String,
+        required: [true, "Question field is required."]
+    },
+    answer: {
+        type: String,
+        required: [true, "Answer field is required"]
+    },
+    timeEntered: {
+        type: Number,
+        required: [true, "Time field should be automatically generated."],
+        default: (new Date()).getTime()
+    },
+    nextTime: {
+        type: Number,
+        required: [true, ""],
+        default: (new Date()).getTime()
+    },
+    step: {
+        type: Number,
+        required: [true, "Step should be automatically generated."],
+        default: 0
+    },
+    previousAttempts: {
+        type: Array,
+        required: [true, "previousAttempts should be automatically generated"],
+        default: []
+    },
+    subject: {
+        type: String,
+        required: [true, "Subject be "],
+        default: "unassigned"
+    }
+});
+
+const Btc = mongoose.model('btc', btcSchema);
+
+module.exports = Btc;

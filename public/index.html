@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Front End</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  </head>
+  <body>
+    <h1 class="title">Beat The Curve</h1>
+    <div id="homepage">
+      <h1>Let's do some memorizing</h1>
+      <div id="curveBits"></div>
+    </div>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+
+    <!-- Create React Component -->
+    <script type="text/babel">
+
+      var Btcs = React.createClass({
+        getInitialState: function() {
+           return({
+              btcs: []
+           });
+        },
+        render: function() {
+          var btcs = this.state.btcs;
+          btcs = btcs.map(function(btc, index) {
+             return (
+                <li key={index}>
+                  <span className="question">{btc.question}</span><br />
+                  <span className="answer">{btc.answer}</span><br />
+                  <span className="step">{btc.step}</span><br />
+                </li>
+             )
+          });
+      
+          return(
+            <div id="btc-container">
+              <form id="search" onSubmit={this.handlePostSubmit}>
+                <label>Enter your question:</label>
+                <input type="text" ref="qst" placeholder="question" required />
+                <label>Enter your answer:</label>
+                <input type="text" ref="ans" placeholder="answer" required />
+                <label>Enter the subject:</label>
+                <input type="text" ref="sbjt" placeholder="subject" required />
+                <input type="submit" value="Submit" />
+              </form>
+              <ul>{btcs}</ul>
+            </div>
+            );
+            },
+            handleSubmit: function(e) {
+               e.preventDefault();
+               var qst = this.refs.qst.value;
+               var ans = this.refs.ans.value;
+
+               fetch('http://localhost:4000/api/btc').then(function(data) {
+                   return data.json();
+            }).then(json => {
+               this.setState({
+                   btcs: json
+               });
+              });
+            },
+
+            handlePostSubmit: function(e) {
+               e.preventDefault();
+               var qst = this.refs.qst.value;
+               var ans = this.refs.ans.value;
+               var sbjt = this.refs.sbjt.value;
+               var content = {question : qst, answer : ans, subject : sbjt}
+
+               fetch('http://localhost:4000/api/btc/', {
+                  method: 'post',
+                  headers: {
+                     'Content-Type': 'application/json'
+            },
+                  body: JSON.stringify(content)
+            }).then(console.log("Added it to the database."));   
+            }
+            });
+
+
+            
+            
+            ReactDOM.render(<Btcs />, document.getElementById("curveBits"));
+            
+    </script>
+    
+  </body>
+</html>
