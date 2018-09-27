@@ -10,7 +10,10 @@
     <h1 class="title">Beat The Curve</h1>
     <div id="homepage">
       <h1>Let's do some memorizing</h1>
-      <div id="curveBits"></div>
+      <div id="curveBitsCreate"></div>
+      <div id="curveBitsRead"></div>
+      <div id="curveBitsUpdate"></div>
+      <div id="curveBitsDelete"></div>
     </div>
 
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -20,7 +23,7 @@
     <!-- Create React Component -->
     <script type="text/babel">
 
-      var Btcs = React.createClass({
+      var BtcsCreate = React.createClass({
         getInitialState: function() {
            return({
               btcs: []
@@ -39,7 +42,7 @@
           });
       
           return(
-            <div id="btc-container">
+            <div id="btc-create-container">
               <form id="search" onSubmit={this.handlePostSubmit}>
                 <label>Enter your question:</label>
                 <input type="text" ref="qst" placeholder="question" required />
@@ -52,19 +55,6 @@
               <ul>{btcs}</ul>
             </div>
             );
-            },
-            handleSubmit: function(e) {
-               e.preventDefault();
-               var qst = this.refs.qst.value;
-               var ans = this.refs.ans.value;
-
-               fetch('http://localhost:4000/api/btc').then(function(data) {
-                   return data.json();
-            }).then(json => {
-               this.setState({
-                   btcs: json
-               });
-              });
             },
 
             handlePostSubmit: function(e) {
@@ -85,10 +75,52 @@
             });
 
 
+     var BtcsRead = React.createClass({
+          getInitialState : function() {
+             return({  
+                btcs: []
+            });
+          },
+            render : function() {
+               var btcs = this.state.btcs;
+               btcs = btcs.map(function(btc, index) {
+                   return (
+                      <li key={index}>
+                        <span className="question">{btc.question}</span><br />
+                        <span className="answer">{btc.answer}</span><br />
+                        <span className="subject">{btc.subject}</span><br />
+                        <span className="step">{btc.step}</span><br />
+                      </li>
+                   )
+               });
+               return(
+                 <div id="btc-read-container">
+                    <form id="seeEverything" onSubmit={this.handleGetSubmit}>
+                      <label>See every entry in the database</label>
+                      <input type="submit" value="See all entries" />
+                    </form>
+                    <ul>{btcs}</ul>
+                 </div>
+               )
+            },
+
+            handleGetSubmit: function(e) {
+               e.preventDefault();
+
+               fetch('http://localhost:4000/api/btc').then(function(data) {
+                   return data.json();
+            }).then(json => {
+               this.setState({
+                   btcs: json
+               });
+              });
+            }
+                 
+        });
             
             
-            ReactDOM.render(<Btcs />, document.getElementById("curveBits"));
-            
+            ReactDOM.render(<BtcsCreate />, document.getElementById("curveBitsCreate"));
+            ReactDOM.render(<BtcsRead />, document.querySelector("#curveBitsRead"));
     </script>
     
   </body>

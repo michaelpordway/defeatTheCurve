@@ -11,6 +11,12 @@ const app = express();
 mongoose.connect('mongodb://localhost/btc');
 mongoose.Promise = global.Promise;
 
+// put up static page
+
+app.use(express.static('public'));
+
+// parse the body
+
 app.use(bodyParser.json());
 
 // initialize routes

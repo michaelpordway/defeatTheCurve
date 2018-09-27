@@ -1,5 +1,7 @@
 var http = require('http');
-var mongo = require('mongodb');
+// var mongo = require('mongodb');
+// var mongoClient = mongo.MongoClient;
+// var mongoUrl = "mongodb://localhost:27017/mydb";
 
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});

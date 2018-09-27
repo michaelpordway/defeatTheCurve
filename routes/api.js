@@ -7,6 +7,30 @@ const Btc = require('../models/btc');
 router.get('/btc', function(req, res, next) {
     Btc.find({}).then(function(btcs) {
         res.send(btcs);
+    }).catch(next);
+});
+
+// get a specific btc object by id.
+
+router.get('/btc/id/:id', function(req, res, next) {
+    Btc.find({_id:req.params.id}).then(function(btcs) {
+        res.send(btcs);
+    }).catch(next);
+});
+
+// get all btc objects with a nextTime older than now
+
+router.get('/btc/ready', function(req, res, next) {
+    Btc.find({"nextTime": {$lt: (new Date()).getTime()}}).then(function(btcs) {
+        res.send(btcs);
+    });
+});
+
+// get one btc object with a nextTime older than now
+
+router.get('/btc/ready1', function(req, res, next) {
+    Btc.find({"nextTime": {$lt: (new Date()).getTime()}}).limit(1).then(function(btcs) {
+        res.send(btcs);
     });
 });
 
@@ -33,7 +57,7 @@ router.put('/btc/:id', function(req, res, next) {
         Btc.findOne({_id: req.params.id}).then(function(btc){
             res.send(btc);
         });
-    });
+    }).catch(next);
 //    res.send({type: 'PUT'});
 
 });

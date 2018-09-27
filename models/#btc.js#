@@ -40,11 +40,11 @@ const btcSchema = new Schema({
         required: [true, "Step should be automatically generated."],
         default: 0
     },
-    previousAttempts: previousAttemptsSchema{
+    previousAttempts: previousAttemptsSchema, /*{
         type: Array,
         required: [true, "previousAttempts should be automatically generated"],
         default: []
-    },
+    } */
     subject: {
         type: String,
         required: [true, "Subject be "],
